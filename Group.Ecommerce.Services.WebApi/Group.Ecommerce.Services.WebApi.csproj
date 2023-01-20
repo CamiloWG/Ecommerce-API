@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Group.Ecommerce.Application.DTO\Group.Ecommerce.Application.DTO.csproj" />
+    <ProjectReference Include="..\Group.Ecommerce.Application.Interface\Group.Ecommerce.Application.Interface.csproj" />
+    <ProjectReference Include="..\Group.Ecommerce.Application.Main\Group.Ecommerce.Application.Main.csproj" />
+    <ProjectReference Include="..\Group.Ecommerce.Domain.Core\Group.Ecommerce.Domain.Core.csproj" />
+    <ProjectReference Include="..\Group.Ecommerce.Domain.Entity\Group.Ecommerce.Domain.Entity.csproj" />
+    <ProjectReference Include="..\Group.Ecommerce.Domain.Interface\Group.Ecommerce.Domain.Interface.csproj" />
+    <ProjectReference Include="..\Group.Ecommerce.Infraestructure.Data\Group.Ecommerce.Infraestructure.Data.csproj" />
+    <ProjectReference Include="..\Group.Ecommerce.Infraestructure.Interface\Group.Ecommerce.Infraestructure.Interface.csproj" />
+    <ProjectReference Include="..\Group.Ecommerce.Infraestructure.Repository\Group.Ecommerce.Infraestructure.Repository.csproj" />
+    <ProjectReference Include="..\Group.Ecommerce.Transversal.Comon\Group.Ecommerce.Transversal.Common.csproj" />
+    <ProjectReference Include="..\Group.Ecommerce.Transversal.Mapper\Group.Ecommerce.Transversal.Mapper.csproj" />
+  </ItemGroup>
+
+</Project>

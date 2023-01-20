@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.123" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Group.Ecommerce.Infraestructure.Data\Group.Ecommerce.Infraestructure.Data.csproj" />
+    <ProjectReference Include="..\Group.Ecommerce.Infraestructure.Interface\Group.Ecommerce.Infraestructure.Interface.csproj" />
+    <ProjectReference Include="..\Group.Ecommerce.Transversal.Comon\Group.Ecommerce.Transversal.Common.csproj" />
+  </ItemGroup>
+
+</Project>

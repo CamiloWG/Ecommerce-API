@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Group.Ecommerce.Application.DTO\Group.Ecommerce.Application.DTO.csproj" />
+    <ProjectReference Include="..\Group.Ecommerce.Transversal.Comon\Group.Ecommerce.Transversal.Common.csproj" />
+  </ItemGroup>
+
+</Project>
