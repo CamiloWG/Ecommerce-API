@@ -10,7 +10,7 @@ namespace Group.Ecommerce.Transversal.Mapper
         public MappingProfile() 
         { 
                 CreateMap<Customers, CustomersDto>().ReverseMap();
-
+                CreateMap<Users, UsersDto>().ReverseMap();
         }
     }
 }
