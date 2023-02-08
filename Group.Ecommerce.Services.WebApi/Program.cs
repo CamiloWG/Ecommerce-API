@@ -1,15 +1,18 @@
 using Group.Ecommerce.Application.Interface;
 using Group.Ecommerce.Application.Main;
+using Group.Ecommerce.Application.Validator;
 using Group.Ecommerce.Domain.Core;
 using Group.Ecommerce.Domain.Interface;
 using Group.Ecommerce.Infraestructure.Data;
 using Group.Ecommerce.Infraestructure.Interface;
 using Group.Ecommerce.Infraestructure.Repository;
 using Group.Ecommerce.Services.WebApi.Helpers;
+using Group.Ecommerce.Services.WebApi.Modules;
 using Group.Ecommerce.Transversal.Common;
+using Group.Ecommerce.Transversal.Logging;
 using Group.Ecommerce.Transversal.Mapper;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -33,10 +36,16 @@ builder.Services.AddScoped<ICustomersRepository, CustomersRepository>();
 builder.Services.AddScoped<IUsersApplication, UsersApplication>();
 builder.Services.AddScoped<IUsersDomain, UsersDomain>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+builder.Services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
+
+builder.Services.AddTransient<UsersDtoValidator>();
+
 
 builder.Services.AddCors(options => options.AddPolicy(myPolicy, builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
 builder.Services.AddMvc(options => options.SuppressAsyncSuffixInActionNames = false);
+
+builder.Services.AddHealthCheck(configuration);
 
 var appSettingsSection = configuration.GetSection("Config");
 builder.Services.Configure<AppSettings>(appSettingsSection);
@@ -81,7 +90,7 @@ builder.Services.AddAuthentication(x =>
         ValidIssuer = Issuer,
         ValidateAudience = true,
         ValidAudience = Audience,
-        ValidateLifetime = true,
+        ValidateLifetime = false,
         ClockSkew = TimeSpan.Zero
     };
 });
@@ -111,27 +120,26 @@ builder.Services.AddSwaggerGen(swa =>
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     swa.IncludeXmlComments(xmlPath);
 
-    swa.AddSecurityDefinition("Authorization", new OpenApiSecurityScheme
+    var SecurityScheme = new OpenApiSecurityScheme
     {
-        Description = "Authentication by API key",
         Name = "Authorization",
+        Description = "Enter JWT Bearer token",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey
-    });
-
-    swa.AddSecurityRequirement(new OpenApiSecurityRequirement()
-    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        Reference = new OpenApiReference
         {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Authorization"
-                }
-            },
-            new List<string>()
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
         }
+    };
+
+    swa.AddSecurityDefinition(SecurityScheme.Reference.Id, SecurityScheme);
+
+    swa.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        { SecurityScheme, new List<string>() { } }
     });
 
 
@@ -149,7 +157,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+app.UseAuthentication();
 
 app.UseSwagger();
 
@@ -160,10 +168,18 @@ app.UseSwaggerUI(c =>
 
 app.UseCors(myPolicy);
 
-app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapHealthChecksUI();
+app.MapHealthChecks("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
 
 app.Run();

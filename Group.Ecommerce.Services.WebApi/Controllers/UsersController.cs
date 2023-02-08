@@ -40,7 +40,7 @@ namespace Group.Ecommerce.Services.WebApi.Controllers
                 } else return NotFound(response.Message);
             }
 
-            return BadRequest(response.Message);
+            return BadRequest(response);
         }
 
         private string BuildToken(Response<UsersDto> usersDto)

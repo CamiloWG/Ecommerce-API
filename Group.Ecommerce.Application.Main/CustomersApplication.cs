@@ -13,11 +13,13 @@ namespace Group.Ecommerce.Application.Main
     {
         private readonly ICustomersDomain _customersDomain;
         private readonly IMapper _mapper;
+        private readonly IAppLogger<CustomersApplication> _logger;
 
-        public CustomersApplication(ICustomersDomain customersDomain, IMapper mapper)
+        public CustomersApplication(ICustomersDomain customersDomain, IMapper mapper, IAppLogger<CustomersApplication> logger)
         {
             _customersDomain = customersDomain;
             _mapper = mapper;
+            _logger = logger;
         }
 
 
@@ -118,12 +120,14 @@ namespace Group.Ecommerce.Application.Main
                 {
                     response.IsSucces = true;
                     response.Message = "La consula se realizó exitosamente!";
+                    _logger.LogInformation(response.Message);
                 }
             }
             catch (Exception e)
             {
                 response.IsSucces = false;
                 response.Message = e.Message;
+                _logger.LogError(response.Message);
             }
 
             return response;

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Group.Ecommerce.Services.WebApi.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class CustomersController : ControllerBase

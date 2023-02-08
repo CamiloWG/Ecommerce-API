@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Group.Ecommerce.Transversal.Mapper": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:53134;http://localhost:53135"
+    }
+  }
+}

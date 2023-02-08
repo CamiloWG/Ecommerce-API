@@ -3,6 +3,7 @@ using Group.Ecommerce.Application.DTO;
 using Group.Ecommerce.Application.Interface;
 using Group.Ecommerce.Domain.Interface;
 using Group.Ecommerce.Transversal.Common;
+using Group.Ecommerce.Application.Validator;
 
 namespace Group.Ecommerce.Application.Main
 {
@@ -10,17 +11,21 @@ namespace Group.Ecommerce.Application.Main
     {
         private readonly IMapper _mapper;
         private readonly IUsersDomain _usersDomain;
-        public UsersApplication(IUsersDomain usersDomain, IMapper mapper) 
+        private readonly UsersDtoValidator _userDtoValidator;  
+        public UsersApplication(IUsersDomain usersDomain, IMapper mapper, UsersDtoValidator usersDtoValidator) 
         {
             _usersDomain = usersDomain;
             _mapper = mapper;
+            _userDtoValidator = usersDtoValidator;
         }
         public Response<UsersDto> Authenticate(string username, string password)
         {
             var response = new Response<UsersDto>();
-            if(string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            var validation = _userDtoValidator.Validate(new UsersDto { UserName = username, Password = password });
+            if(!validation.IsValid)
             {
-                response.Message = "Error los parametros no pueden ser vacios";
+                response.Message = "Error de validación";
+                response.Errors = validation.Errors;
                 return response;
             }
             try
